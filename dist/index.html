@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="表策是一款在浏览器本地运行的 CSV 销售周报生成器。导入订单表，即刻获得关键指标、趋势和排行。">
+  <meta name="theme-color" content="#07111f">
+  <title>表策 · 销售周报生成器</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%2307111f'/%3E%3Cpath d='M16 44V30h8v14zm12 0V20h8v24zm12 0V12h8v32z' fill='%233ce6c4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#workspace" aria-label="表策首页">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>表策</span>
+    </a>
+    <nav aria-label="主导航">
+      <a href="#workspace">生成周报</a>
+      <a href="#pricing">服务价格</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="workspace" id="workspace">
+      <div class="intro">
+        <div>
+          <p class="eyebrow">本地处理 · 无需注册</p>
+          <h1>订单表进来，<br><span>经营结论</span>出来。</h1>
+        </div>
+        <p class="intro-copy">导入 CSV 订单表，自动生成销售额、订单数、客单价、趋势和排行。数据只在当前浏览器处理，不会上传。</p>
+      </div>
+
+      <div class="upload-panel" id="dropZone">
+        <input id="fileInput" type="file" accept=".csv,text/csv" hidden>
+        <div class="upload-icon" aria-hidden="true">↥</div>
+        <div>
+          <h2>拖入 CSV 订单表</h2>
+          <p>支持日期、金额、商品、渠道等常见中英文字段</p>
+        </div>
+        <button class="primary" id="chooseFile" type="button">选择文件</button>
+        <button class="text-button" id="loadDemo" type="button">先看演示数据</button>
+      </div>
+
+      <div class="status-line" id="statusLine" role="status" aria-live="polite">
+        <span class="status-dot"></span>
+        <span>演示模式：点击“先看演示数据”可立即体验</span>
+      </div>
+
+      <section class="report" id="report" aria-label="销售周报">
+        <div class="report-head">
+          <div>
+            <p class="section-label">销售概览</p>
+            <h2 id="reportTitle">本周经营周报</h2>
+            <p id="dateRange">等待导入数据</p>
+          </div>
+          <button class="secondary" id="exportReport" type="button" disabled>打印 / 保存 PDF</button>
+        </div>
+
+        <div class="metrics">
+          <article class="metric metric-accent">
+            <span>销售额</span>
+            <strong id="revenue">¥0</strong>
+            <small id="revenueNote">—</small>
+          </article>
+          <article class="metric">
+            <span>有效订单</span>
+            <strong id="orders">0</strong>
+            <small id="ordersNote">—</small>
+          </article>
+          <article class="metric">
+            <span>平均客单价</span>
+            <strong id="aov">¥0</strong>
+            <small>销售额 ÷ 有效订单</small>
+          </article>
+          <article class="metric">
+            <span>退款金额</span>
+            <strong id="refund">¥0</strong>
+            <small id="refundNote">—</small>
+          </article>
+        </div>
+
+        <div class="insight-grid">
+          <article class="chart-card">
+            <div class="card-title">
+              <div>
+                <p class="section-label">每日趋势</p>
+                <h3>销售额变化</h3>
+              </div>
+              <span class="legend"><i></i>销售额</span>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="trendChart" aria-label="每日销售额趋势图"></canvas>
+              <p class="empty" id="chartEmpty">导入数据后显示趋势</p>
+            </div>
+          </article>
+
+          <article class="ranking-card">
+            <div class="card-title">
+              <div>
+                <p class="section-label">贡献排行</p>
+                <h3>渠道表现</h3>
+              </div>
+            </div>
+            <ol class="ranking" id="channelRanking">
+              <li class="placeholder">暂无数据</li>
+            </ol>
+          </article>
+        </div>
+
+        <article class="table-card">
+          <div class="card-title">
+            <div>
+              <p class="section-label">商品分析</p>
+              <h3>热销商品</h3>
+            </div>
+            <span id="rowCount">0 条记录</span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>商品</th><th>订单数</th><th>销售额</th><th>占比</th></tr></thead>
+              <tbody id="productTable"><tr><td colspan="4" class="placeholder">暂无数据</td></tr></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </section>
+
+    <section class="offer" id="pricing">
+      <div class="offer-copy">
+        <p class="eyebrow">需要适配你的表格？</p>
+        <h2>把每周两小时的整理，压缩成两分钟。</h2>
+        <p>标准版适合常见订单表；定制服务可适配多平台合并、利润核算和固定格式汇报。</p>
+      </div>
+      <div class="plans">
+        <article class="plan">
+          <p>标准工具</p>
+          <strong>免费</strong>
+          <ul><li>浏览器本地处理</li><li>CSV 自动识别</li><li>基础周报导出</li></ul>
+          <button class="secondary jump-workspace" type="button">立即使用</button>
+        </article>
+        <article class="plan featured">
+          <div class="tag">适合试单</div>
+          <p>一次性代配置</p>
+          <strong>¥399 <small>起</small></strong>
+          <ul><li>适配一种订单格式</li><li>定制指标和汇报口径</li><li>7 天内一次调整</li></ul>
+          <button class="primary" id="copyBrief" type="button">复制合作需求</button>
+        </article>
+        <article class="plan">
+          <p>持续数据服务</p>
+          <strong>¥599 <small>/ 月起</small></strong>
+          <ul><li>每周固定生成报告</li><li>异常数据检查</li><li>每月一次规则调整</li></ul>
+          <button class="secondary" id="copyMonthlyBrief" type="button">复制月度需求</button>
+        </article>
+      </div>
+      <p class="pricing-note">以上为首批客户验证价，最终以数据复杂度和交付范围为准。</p>
+    </section>
+
+    <section class="faq" id="faq">
+      <p class="eyebrow">常见问题</p>
+      <h2>开始前，你可能想确认这些</h2>
+      <details><summary>我的订单数据会被上传吗？</summary><p>不会。当前版本在你的浏览器中读取并计算 CSV，刷新页面后数据即清除。</p></details>
+      <details><summary>哪些字段可以自动识别？</summary><p>日期、金额、商品、渠道、订单号、状态和退款金额等常见中英文字段。字段不匹配时可使用定制服务。</p></details>
+      <details><summary>Excel 文件可以直接用吗？</summary><p>请先在 Excel 或表格软件中另存为 CSV。后续版本会根据实际客户需求决定是否加入 XLSX 支持。</p></details>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

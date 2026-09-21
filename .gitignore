@@ -1,0 +1,4 @@
+.sites-runtime/
+*.zip
+.DS_Store
+Thumbs.db
