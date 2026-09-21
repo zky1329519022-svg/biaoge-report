@@ -1,4 +1,5 @@
 .sites-runtime/
 *.zip
+.release/
 .DS_Store
 Thumbs.db

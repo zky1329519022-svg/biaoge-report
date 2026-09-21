@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用问题
+    url: https://github.com/zky1329519022-svg/biaoge-report/issues/new?template=service-request.yml
+    about: 通过结构化表单说明问题，避免提交敏感数据。

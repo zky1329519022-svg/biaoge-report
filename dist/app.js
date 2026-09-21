@@ -211,20 +211,10 @@
     reader.readAsText(file, 'utf-8');
   }
 
-  function copyBrief(type) {
-    const monthly = type === 'monthly';
-    const text = monthly
-      ? '我需要持续数据服务。数据来源：____；每周处理次数：____；需要的核心指标：____；当前表格的主要问题：____。'
-      : '我需要一次性代配置。数据来源：____；订单表字段：____；希望生成的指标：____；期望交付时间：____。';
-    navigator.clipboard?.writeText(text).then(() => showToast('合作需求已复制')).catch(() => showToast(text));
-  }
-
   els.chooseFile.addEventListener('click', () => els.fileInput.click());
   els.fileInput.addEventListener('change', (event) => processFile(event.target.files[0]));
   els.loadDemo.addEventListener('click', () => processRows(demo, '演示数据'));
   els.exportReport.addEventListener('click', () => window.print());
-  $('copyBrief').addEventListener('click', () => copyBrief('once'));
-  $('copyMonthlyBrief').addEventListener('click', () => copyBrief('monthly'));
   document.querySelector('.jump-workspace').addEventListener('click', () => $('workspace').scrollIntoView({ behavior: 'smooth' }));
   ['dragenter', 'dragover'].forEach((eventName) => els.dropZone.addEventListener(eventName, (event) => { event.preventDefault(); els.dropZone.classList.add('dragging'); }));
   ['dragleave', 'drop'].forEach((eventName) => els.dropZone.addEventListener(eventName, (event) => { event.preventDefault(); els.dropZone.classList.remove('dragging'); }));

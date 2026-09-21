@@ -1,0 +1,57 @@
+name: 订单表适配与数据服务
+description: 申请一次性适配或月度数据服务。请勿提交真实订单数据或个人信息。
+title: "[服务需求] "
+labels:
+  - customer-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢关注表策。请只描述字段和业务规则，不要上传包含姓名、电话、地址、订单号等信息的原始订单表。
+  - type: dropdown
+    id: service
+    attributes:
+      label: 需要哪种服务？
+      options:
+        - 一次性订单表适配（399 元起）
+        - 持续数据服务（599 元／月起）
+        - 先评估需求
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: 数据来自哪里？
+      description: 例如淘宝、抖音商城、微信小店或自有表格。
+      placeholder: 微信小店导出的 CSV
+    validations:
+      required: true
+  - type: input
+    id: volume
+    attributes:
+      label: 每周大约多少行数据？
+      placeholder: 约 500 行
+    validations:
+      required: true
+  - type: textarea
+    id: metrics
+    attributes:
+      label: 希望得到哪些指标？
+      description: 请列出最重要的 3—6 项。
+      placeholder: 销售额、退款率、商品排行、渠道占比……
+    validations:
+      required: true
+  - type: textarea
+    id: current-work
+    attributes:
+      label: 现在如何处理？最耗时的步骤是什么？
+      placeholder: 每周手工合并三张表，再制作固定格式周报……
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 隐私确认
+      options:
+        - label: 我没有在本 Issue 中提交真实订单数据或个人信息。
+          required: true
